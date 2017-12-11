@@ -53,8 +53,8 @@ switch changed
         file_name = 'y01y02';
 end
 
-path_modtheta = strcat('../../relatorio/figs/1/modtheta/',sim_str,file_name,'.eps');
-path_e0 = strcat('../../relatorio/figs/1/e0/',sim_str,file_name,'.eps');
+path_modtheta = strcat('../../relatorio/figs/2/modtheta/',sim_str,file_name,'.eps');
+path_e0 = strcat('../../relatorio/figs/2/e0/',sim_str,file_name,'.eps');
 
 %--------------- Fig1: mod theta -------------
 figure(1);clf;
