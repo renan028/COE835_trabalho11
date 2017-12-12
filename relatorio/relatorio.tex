@@ -29,9 +29,25 @@
   colorlinks=true,
   linkcolor=blue
 }
-     
+   
 \input{macros}
 
+%Matlab code in latex 
+\usepackage[final]{listings}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0}
+\definecolor{mylilas}{RGB}{170,55,241}
+\lstdefinestyle{myMatlab}
+{
+language=matlab,frame=single, basicstyle=\small\ttfamily,breaklines=true,%
+morekeywords={matlab2tikz}, keywordstyle=\color{blue}, morekeywords=[2]{1}, keywordstyle=[2]{\color{black}}, commentstyle=\color{mygreen}, stringstyle=\color{mylilas}, identifierstyle=\color{black}, showstringspaces=false,%without this there will be a symbol in the places where there is a space
+numbers=left, numberstyle={\scriptsize \color{black}},% size of the numbers
+numbersep=9pt, % this defines how far the numbers are from the text
+% emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+% emph=[2]{word1,word2}, emphstyle=[2]{style},
+}
+
+\def\infinity{\rotatebox{90}{8}}
 %Set normal paragraph spacing
 \setlength\parindent{24pt}
 
@@ -40,7 +56,7 @@
 \pagestyle{fancy}%
 \renewcommand{\headrulewidth}  {0.4pt}%
 \renewcommand{\footrulewidth}  {0.4pt}%
-\lhead{\bfseries{Relatório do Trabalho 5}}%
+\lhead{\bfseries{Relatório do Trabalho 11}}%
 \chead{}%
 \rhead{\bfseries\thepage}%
 \lfoot{}%
@@ -59,13 +75,13 @@ Matheus Ferreira dos Reis \\[2mm]
 Renan Salles de Freitas \\[10mm]
 }
 
-\textbf{Algoritmo:} \quad \HI{MRAC Direto} ($n^* = 1$) \\[2mm]
+\textbf{Algoritmo:} \quad \HI{MIMO MRAC Direto} ($n^* = 1$) \\[2mm]
 
 \bigskip%
 \textbf{Caso}: \quad \parbox[t]{10cm}{
-  $n = 2, 3$ \quad (ordem da planta) \\[2mm]
+  $n = 1, 2$ \quad (ordem da planta) \\[2mm]
   $n^* = 1$ \quad (grau relativo) \\[2mm]
-  $n_p = 4, 6$ \quad (\# de parâmetros) \\[15mm]
+  $n_p = 5, 17$ \quad (\# de parâmetros) \\[15mm]
 }
 
 %---------------------------------------------------------------------
@@ -75,7 +91,7 @@ Renan Salles de Freitas \\[10mm]
 \input{teoria}
 \input{implementacao}
 \input{simulacao} \newpage
-\input{discussao} 
+%\input{discussao} 
 %---------------------------------------------------------------------
 %\bibliographystyle{agsm}
 %\bibliography{bib,coe736}

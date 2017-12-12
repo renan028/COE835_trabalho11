@@ -1,5 +1,5 @@
 %---------------------------------------------------------------------
-\section{MRAC direto ($n^* = 1$)}
+\section{MIMO MRAC direto ($n^* = 1$)}
 
 O controle adaptativo de modelo de referência (MRAC) é um método de controle
 adaptativo com uma fundação teórica rigorosa e sistemática, possui promissora e
@@ -9,113 +9,193 @@ resposta de um modelo de referência, dado que a planta possui parâmetros desconh
 Isto é feito através de uma lei de adaptação dos parâmetros do controlador que garante a estabilidade 
 do sistema em malha fechada e a \textit{limitação} dos parâmetros estimados.
 
-Considere um sistema linear invariante no tempo descrito pela equação
-diferencial:% (Eq. \ref{eq:planta}):
+Assim como no caso SISO, considere um sistema linear invariante no tempo
+descrito pela equação diferencial:% (Eq. \ref{eq:planta}):
 %
 \begin{equation}
-P(s) \, [y(t)] = Z(s) \, [u(t)],
+y(t) = P(s) \, [u(t)],
 \label{eq:planta}
 \end{equation}
 
-onde $y(t) \in \mathbb{R}$ e $u(t) \in \mathbb{R}$ são os sinais medidos de
-saída e entrada do sistema, sendo:
-%
-\begin{gather}
-P(s) = s^n + p_{n-1}s^{n-1}+\ldots + p_1s+p_0\,,\\
-Z(s) = z_ms^m + z_{m-1}s^{m-1}+\ldots + z_1s+z_0 \,,
-\label{eq:poly}
-\end{gather}
-%
-os polinômios em $s$, com $s$ sendo o operador de diferencial
-$s[x(t)]=\dot{x}(t)$. $p_i$, $i = 0,1,\ldots,n-1$ e $z_i$, $i=0,1,\ldots,m$ ($n>m$) são os parâmetros desconhecidos da planta.
+No caso MIMO, $y(t) \in \mathbb{R}^n$ e $u(t) \in \mathbb{R}^n$ são os
+sinais medidos de saída e entrada do sistema, sendo $P(s) \in
+\mathbb{R}^{n\times n}$ a matriz função de transferência. Podemos exemplificar
+com o caso MIMO de duas entradas e duas saídas:
 
+\begin{align}\label{eq:P}
+P(s) &= \begin{bmatrix}
+\frac{1}{s+1} & \frac{2}{s+2} \\
+\frac{1}{s^2+5s+4} & \frac{1}{s+3}
+\end{bmatrix} 
+\end{align}
+
+Definimos a matriz \textit{interactor} $\xi(s)$ de $P(s)$ tal que:
+
+\begin{align}
+\lim_{s \to \infinity}\xi(s)P(s) &= K_p
+\end{align}
+
+é não singular. No caso de grau relativo 1 ($n^* = 1$), a matriz
+\textit{interactor} é $\xi(s) = sI$. Para o exemplo (eq.~\ref{eq:P}), temos:
+
+\begin{align}
+\nonumber 
+\lim_{s \to \infinity}\xi(s)P(s) &= \begin{bmatrix}
+\frac{s}{s+1} & \frac{2s}{s+2} \\
+\frac{s}{s^2+5s+4} & \frac{s}{s+3}
+\end{bmatrix} = \begin{bmatrix}
+1 & 2\\
+0 & 1
+\end{bmatrix}
+\end{align}
+
+Define-se índice de observabilidade $\nu$ como os graus dos polinômios da matriz
+$P(s)$. E \textit{observability index} como o maior grau.
 
 Dado um modelo de referência descrito como:
-%
 \begin{equation}
-P_m(s)[y_m](t) = r(t),
+y_M(t) = M(s)r(t),
 \end{equation}
 %
-onde $P_m(s)$ é um polinômio estável mônico e $r(t)$ é a entrada de referência
-limitada, o objetivo do controle é encontrar uma lei de controle $u(t)$ tal que todo o sistema de malha
-fechada produza sinais limitados e a saída da planta $y(t)$ rastreie assintoticamente o modelo de referência $y_m(t)$. A estrutura exige algumas premissas:
+onde $M(s) = \text{diag}\left\{\frac{1}{s+a_i}\right\}$ é uma matriz diagonal
+com polinômios estáveis e mônicos, e $r(t) \in \mathbb{R}^n$ é a entrada do sistema
+MIMO, sinal limitado. O objetivo é encontrar uma lei de controle $u(t)$ tal que
+todo o sistema de malha fechada produza sinais limitados e a saída da planta
+$y(t)$ rastreie assintoticamente o modelo de referência $y_M(t)$. A estrutura
+exige algumas premissas:
 \begin{enumerate}
-  \item $Z(s)$ é um polinômio estável (a planta é de fase mínima);
-  \item O sinal de $k_p$ é conhecido;
-  \item O grau relativo da planta é conhecido, e no caso deste trabalho, é igual a um ($n^* = 1$);
-  \item A ordem da planta ($n$) é conhecida.
-	\item O modelo de referencia é dado por uma função de transferência $P_m(s)$ que é SPR.
+  	\item Os zeros de $P(s)$ tem parte real negativa;
+  	\item $P(s)$ tem posto completo e grau relativo 1;
+  	\item O \textit{Observability index} de $P(s)$ é conhecido;
+  	\item Os sinais dos menores principais líderes da matriz $K_p$ são
+  	conhecidos.
+	\item O modelo de referencia é dado por uma função de transferência $P_M(s)$
+que é SPR.
 \end{enumerate}
 
-A estrutura do controlador é 2DOF, como pode ser visto na figura
-\ref{mrac}. Escolhe-se então um polinômio do observador $A_0(s)$ de modo que se obtenha um polinômio estável $\Lambda(s) =
-s^n+\lambda_{n-1}s^{n-1}+\ldots+\lambda_1s+\lambda_0$ para filtrar a entrada e a
-saída da planta com o filtro $\frac{1}{\Lambda(s)}$. A equação do controlador
-é descrita como:
-\begin{equation}
-u(t) = \theta_1^\intercal\omega_1(t)+\theta_2^\intercal\omega_2(t)+\theta_n
-y(t)+ \theta_{2n} r(t),
-\end{equation}
-
-onde o filtro é descrito pela realização de estados:
+É possível provar que existe uma fatoração SDU não única de $K_p$ (notas de
+aula). Assim como caso SISO, a estrutura do controlador é 2DOF. Escolhe-se então um
+polinômio estável $\Lambda(s) = \text{diag}\left\{(s+a_i)^{\nu-1}\right\}$ para
+filtrar a entrada e a saída da planta com o filtro $\frac{1}{\Lambda(s)}$. O
+filtro é descrito pela realização de estados:
 %
 \begin{gather}
-\dot{\omega}_1(t) = A_\lambda \, \omega_1(t) + bu(t)\,,\\
-\dot{\omega}_2(t) = A_\lambda \, \omega_2(t) + by(t)\,,
+\dot{\omega}_1(t) = A_\lambda \, \omega_1(t) + B_\lambda u(t)\,,\\
+\dot{\omega}_2(t) = A_\lambda \, \omega_2(t) + B_\lambda y(t)\,,
 \label{eq:statespace}
 \end{gather}
-%
-onde $\omega_1(t) \in \mathbb{R}^n$, $\omega_2(t) \in \mathbb{R}^n$ e:
-%
-\begin{equation}
-A_\lambda = 
-\begin{bmatrix}
-    0      & 1      & 0      & \dots  & 0      & 0      \\
-    0      & 0      & 1      & 0      & \dots  & 0      \\
-    \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
-    0      & 0      & \dots  & \dots  & 0      & 1      \\
-    -\lambda_0 & -\lambda_1 & \dots & \dots & -\lambda_{n-2} & -\lambda_{n-1} 
+
+Observe que agora $B_\lambda$ é matriz para o caso MIMO. Podemos, então,
+formular a equação do erro:
+
+\begin{align}
+e &= M(s)K_p\left[u-\theta^{*\intercal}\omega\right] \\
+\nonumber &= M(s)SD \left[Uu - U\theta_1^{*\intercal}\omega_1 -
+U\theta_2^{*\intercal}\omega_2 - U\theta_3^{*\intercal}y -
+U\theta_4^{*\intercal}r \right] \\
+\nonumber &= M(s)SD\left[u - K_1\omega_1 - K_2\omega_2 - K_3y - K_4r -
+K_5u\right]
+\\
+\nonumber &= M(s)SD\left[u-u^*\right]
+\end{align}
+
+Notar que $K_5$ é matriz estritamente superior. E $u^*$ pode ser descrito como:
+
+\begin{align}
+u^* &= \begin{bmatrix}
+\Theta_1^{*\intercal}\Omega_1 \\
+\Theta_2^{*\intercal}\Omega_2 \\
+\vdots \\
+\Omega_m^{*\intercal}\Omega_m
 \end{bmatrix}
-\in \mathbb{R}^{n \times n} \,, \quad b =
-\begin{bmatrix}
-    0  \\
-    \vdots  \\
-    0 \\
-    1 \\ 
+\end{align} 
+
+onde $\Omega_i$ são os novos regressores para o caso MIMO:
+
+\begin{align}
+\nonumber \Omega_1^{\intercal} &= \left[\omega^\intercal \quad u_2 \quad u_3
+\quad \ldots \quad u_m \right] \\
+\nonumber \Omega_2^{\intercal} &= \left[\omega^\intercal \quad u_3
+\quad \ldots \quad u_m \right] \\
+\nonumber &\vdots \\
+\nonumber \Omega_m^\intercal &= \left[\omega^\intercal\right] \\
+\Omega^\intercal &= \begin{bmatrix}
+\Omega_1^\intercal & 0 & \ldots & 0 \\
+0 & \Omega_2^\intercal & \ldots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \ldots & \Omega_m^\intercal
 \end{bmatrix}
-\in \mathbb{R}^n \,.
-\label{eq:statespace}
-\end{equation}
+\end{align}
+
+e $\Theta$ é o vetor de parâmetros:
+
+\begin{align}
+\Theta^\intercal = \begin{bmatrix}
+\Theta_1^* \\
+\Theta_2^* \\
+\vdots \\
+\Theta_m^*
+\end{bmatrix}
+\end{align}
+
+A nova estrutura MIMO MRAC pode ser vista na figura~\ref{mrac}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=15cm]{figs/mrac.pdf}
-  \caption{Estrutura MRAC.}
+  \includegraphics[width=15cm]{figs/mrac.png}
+  \caption{Estrutura MIMO MRAC.}
   \label{mrac} 
 \end{figure}
 
-Os valores ideais para o controle $\theta^*$ são obtidos pelo procedimento descrito no trabalho 4, dados os parâmetros da planta conhecidos. Como não é
-o caso, consideramos $\theta$ como uma estimativa dos parâmetros ideais e
-formulamos a seguinte lei de controle:
-%
-\begin{gather}
-u(t) = \theta^\intercal\omega, \\
-\omega(t) = \left[\omega_1(t)^\intercal \quad y(t) \quad \omega_2(t)^\intercal
-\quad r(t)\right]^\intercal, \\
-\theta = \left[\theta_1 \quad \theta_n \quad \theta_2 \quad \theta_{2n}\right]
-\end{gather}
+Comparando com o caso SISO, $\text{sign}(D)$ substitui $\text{sign}(K_p)$ e a
+nova lei de controle é $u = \Omega^\intercal\Theta$. Porém temos que garantir a
+condição $M(s)S$ SPR. Temos que $M(s)S$ é SPR $\iff AP+PA=-2Q<0$ e $PS=I$,
+onde $\{A,B,C\}$ é uma realização de $M(s)S$. Para o caso $n^* = 1$, temos:
 
-Definindo o erro de saída como $e(t) = y(t) - y_m(t)$, é possível demonstrar por
-Lyapunov que, variando $\theta$ através da lei de adaptação:
+\begin{align}
+M(s) &= \begin{bmatrix}
+\frac{1}{s+a_1} & 0\\
+0 & \frac{1}{s+a_2}
+\end{bmatrix} \\
+\nonumber A &= \begin{bmatrix}
+-a_1 & 0\\
+0 & -a_2
+\end{bmatrix}
+\end{align}
+
+Se $a_1 = a_2 = a$, então $M(s)S = \frac{1}{s+a}S$. 
+
+\begin{align}
+P = S^{-1} &= (L_pD_+L_p^\intercal)^{-1} = \begin{bmatrix}
+d_1 & d_1l_1\\
+d_1l_1 & d_2+d_1l_1^2
+\end{bmatrix}^{-1} = \begin{bmatrix}
+\frac{1}{d_1}+\frac{l_1^2}{d_2} & -\frac{l_1}{d_2} \\
+-\frac{l_1}{d_2} & \frac{1}{d_2}
+\end{bmatrix}
+\end{align}
+
+\begin{align}
+Q &= - frac{PA+AP}{2} = \begin{bmatrix}
+\frac{a}{d_1}+\frac{al_1^2}{d_2} & -\frac{l_1a}{d_2}\\
+-\frac{l_1}{d_2} & \frac{a}{d_2}
+\end{bmatrix}\\
+\nonumber \text{det}(Q) &= -\frac{a^2}{d_1d_2}
+\end{align}
 %
+Portanto, $Q<0$ para todo S. Igual ao caso SISO (notas de aula), por Lyapunov
+podemos chegar na lei de adaptação:
+
 \begin{equation}
-\dot{\theta}(t) = -\textrm{sign}[k_p] \, \Gamma \, \omega(t) \, e(t),
+\dot{\Theta}(t) = -\textrm{sign}[D] \, \Gamma \, \Omega(t) \, e(t),
 \end{equation}
-%
+
+onde  $D = \text{diag}\left\{ d_1I_1, d)2I_2, \ldots , d_mI_m\right\}$
+
 o erro converge assintoticamente para zero, em que $\Gamma =
 \Gamma^\intercal > 0$ é uma matriz de ganhos positiva definida.
 
-Neste trabalho, serão consideradas plantas de segunda e terceira ordens com grau
+Neste trabalho, serão consideradas plantas de primeira e segunda ordens com grau
 relativo 1 ($n^*=1$). Iremos simular e discutir o comportamento do erro e das
 saídas para variações das condições iniciais dos parâmetros estimados
 ($\theta(0)$) e da planta ($y(0)$), do ganho de adaptação $\Gamma$ e para

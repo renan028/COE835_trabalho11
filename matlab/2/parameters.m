@@ -1,7 +1,7 @@
 clear;
 clc;
 close all;
-global A w km_1 L;
+global a1 a2 w1 w2 L;
 
 PRINT = true;
 % PRINT = false;
@@ -9,11 +9,13 @@ PRINT = true;
 %% 1nd order system
 
 %Simulation time
-tfinal = 100;
+tfinal = 50;
 
 %Reference
-w = [0.63493 4.5669];
-A = [1 1];
+w1 = [0.63493 4.5669];
+w2 = [0.1 1.1];
+a1 = [1 1];
+a2 = [1 1];
 
 %--------------- First set of parameters ----------------
 
@@ -38,18 +40,18 @@ gamma_1 = 20;
 %--------------- Second set of parameters ----------------
 
 %P
-Np_1 = {[1 2],[1 0];[-1 -2], [1 2]};
-Dp_1 = {[1 -2 1],[1 -2 1];[1 -2 1],[1 -2 1]};
+Np_2 = {[1 2],[1 0];[-1 -2], [1 2]};
+Dp_2 = {[1 -2 1],[1 -2 1];[1 -2 1],[1 -2 1]};
 
 %Pm
-km_1 = [1 1];
-Nm_1 = {[km_1(1)], [0];[0], [km_1(2)]};
-Dm_1 = {[1 1], [1];[1], [1 1]};
+km_2 = [1 1];
+Nm_2 = {[km_2(1)], [0];[0], [km_2(2)]};
+Dm_2 = {[1 1], [1];[1], [1 1]};
 
 %Initial conditions
 y0_2  = 10;
 
 %Adaptation gain
-gamma_2 = 1;
+gamma_2 = 5;
 
 run sim_mrac.m;

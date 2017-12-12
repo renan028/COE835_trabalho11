@@ -1,7 +1,7 @@
 clear;
 clc;
 close all;
-global A w km_1;
+global a1 a2 w1 w2;
 
 PRINT = true;
 % PRINT = false;
@@ -9,11 +9,13 @@ PRINT = true;
 %% 1nd order system
 
 %Simulation time
-tfinal = 10;
+tfinal = 15;
 
 %Reference
-w = [0.63493 4.5669];
-A = [1 1];
+w1 = [0.63493 4.5669];
+w2 = [0.1 1.1];
+a1 = [1 1];
+a2 = [1 1];
 
 %--------------- First set of parameters ----------------
 
@@ -34,7 +36,7 @@ gPm_1 = length(Dm_1)-1;
 y0_1  = 0;
 
 %Adaptation gain
-gamma_1 = 20;
+gamma_1 = 10;
 
 %--------------- Second set of parameters ----------------
 
@@ -42,12 +44,12 @@ gamma_1 = 20;
 phi_2 = pi/4;
 h_2 = 2;
 Np_2 = [1 0;0 1];
-Dp_2 = [1 1];
+Dp_2 = [1 2];
 kp_2 = [cos(phi_2) sin(phi_2);-h_1*sin(phi_2) h_1*cos(phi_2)];
 
 %Pm
 Nm_2 = [2 0;0 2];
-Dm_2 = [1 4];
+Dm_2 = [1 2];
 km_2 = 1;
 
 %Initial conditions

@@ -11,7 +11,7 @@
 %======================================================================
 function dx=mrac(t,x)
 
-global sysP sysM sysL gamma w A km_1;
+global sysP sysM sysL gamma w1 w2 a1 a2;
 
 xp     = x(1:4);
 ym     = x(5:6);
@@ -20,12 +20,14 @@ yf     = x(9:10);
 theta  = x(11:end);
 y = sysP.C*xp;
 %--------------------------
-r = 0;
-for i=1:length(w)
-    r = r + A(i)*sin(w(i)*t);
+r1 = 0;
+r2 = 0;
+for i=1:length(w1)
+    r1 = r1 + a1(i)*sin(w1(i)*t);
+    r2 = r2 + a2(i)*sin(w2(i)*t);
 end
 
-r_ = [r r]';
+r_ = [r1 r2]';
 
 Omega2 = [uf' yf' y' r_']';
 u2 = theta(10:end)'*Omega2;
@@ -39,7 +41,7 @@ u = [u1 u2]';
 dxp = sysP.A*xp + sysP.B*u;
 
 %% ------- Modelo --------
-dym = sysM.A*ym + sysM.B*[r r]';
+dym = sysM.A*ym + sysM.B*r_;
 
 %% Filtro
 duf = sysL.A*uf + sysL.B*u;
