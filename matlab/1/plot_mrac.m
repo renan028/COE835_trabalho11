@@ -24,7 +24,7 @@ switch changed
     case 2 
         str1 = '$P_1$';
         str2 = '$P_2$';
-        file_name = 'P1P2';
+        file_name = 'P1P2_2';
         
     case 3
         str1 = '$P_{m_1}$';

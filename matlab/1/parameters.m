@@ -41,7 +41,7 @@ gamma_1 = 10;
 %--------------- Second set of parameters ----------------
 
 %P
-phi_2 = pi/4;
+phi_2 = pi;
 h_2 = 2;
 Np_2 = [1 0;0 1];
 Dp_2 = [1 2];
