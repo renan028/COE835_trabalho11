@@ -1,11 +1,36 @@
 %---------------------------------------------------------------------
 \section{Discussão}
 
-Os resultados apresentados neste trabalho são semelhantes aos apresentados nos
-trabalhos anteriores sobre MRAC, só que aplicado a sistemas MIMO. Neste
-trabalho, são abordados sistemas com duas entradas e duas saídas e plantas de
-primeira e segunda ordem. com grau relativo 1. O filtro foi definido
-como mais simples possível.
+Neste trabalho, são abordados sistemas com duas entradas e duas saídas (MIMO) e
+plantas de primeira e segunda ordem com grau relativo 1. O filtro foi definido como mais
+simples possível.
+
+Comparativamente, quando apenas $K_p$ é desconhecido (5 parâmetros), o erro
+converge rapidamente para zero, aproximadamente 15 segundos, usando ganhos de adaptação
+$\Gamma$ entre 1 e 10. O erro leva mais tempo para convergir para zero quando
+todos os parâmetros são desconhecidos (17 parâmetros), aproximadamnte 60
+segundos, com ganho de adaptação 20, e o tempo de
+simulação também é bem mais elevado, pois a \textit{ode} calcula a derivada de
+17 parâmetros.
 
 A \textbf{simulação \#1} mostra o comportamento do sistema para variações no
-ganho de adaptação $\Gamma$.
+ganho de adaptação $\Gamma$. Aumentar o ganho de
+adaptação garante convergência mais rápida, porém mais oscilações.
+
+A \textbf{simulação \#2} mostra o comportamento do sistema para variações nas
+condições iniciais da planta $y(0)$. O sistema oscila mais para condições
+iniciais da planta longe de zero. O transitório, porém, foi menor para os
+sistemas com condição inicial diferente de zero. Isso ocorre, pois os parâmetros
+entraram rapidamente em quadratura com o vetor de regressor.
+
+A \textbf{simulação \#3} mostra o comportamento do sistema para variações no
+ganho de adaptação na planta. O deslocamento ($\phi$) não alterou muito o
+ressultado. Vale observar o problema quando $\phi  > \frac{\pi}{2}$ (simulação
+3.1 quando apenas $K_p$ é  dessconhecido), pois o sistema apresenta
+comportamento instável já que os sinais de $D$ são opostos. Para o caso em que
+todos os  parâmetros são  desconehcidos, foi escolhida uma planta mais rápida e
+difícil de ser controlada, e o controlador foi capaz de estabilizar. 
+
+A \textbf{simulação \#4} mostra o comportamento do sistema para variações no
+modelo. Modelos mais rápidos apresentaram maiores oscilações e exigiram mais
+tempo para convergir.
